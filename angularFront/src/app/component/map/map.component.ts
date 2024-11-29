@@ -23,9 +23,9 @@ export class MapComponent implements OnInit {
 		this.authService.checkAuthStatus();
 
 		const userId = parseInt(localStorage.getItem('userId')!, 10);
-
+		
 		const loader = new Loader({
-			apiKey: 'AIzaSyAAu7G1xFIEjPPZ1i9ksc3v4X9-8Y_2NyI',
+			apiKey: process.env.MAP_KEY,
 			version: 'weekly',
 		});
 
