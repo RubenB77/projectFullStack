@@ -3,7 +3,7 @@
 ## Technologies Used :computer:
 
 -   Angular18 :atom_symbol:
--   Java Spring Boot :zap:
+-   Java Spring Boot :leaf:
 -   TypeScript :blue_book:
 -   Java :robot:
 -   PostGreSQL :elephant:
