@@ -1,0 +1,123 @@
+<div class="container mt-4">
+    <h3>Add Expense</h3>
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+
+        <!-- Name Input -->
+        <div class="mb-3">
+            <label for="expenseName" class="form-label">Expense Name</label>
+            <input type="text" id="expenseName" class="form-control" formControlName="expenseName"
+                [class.is-invalid]="expenseForm.get('expenseName')?.invalid && expenseForm.get('expenseName')?.touched">
+            <div *ngIf="expenseForm.get('expenseName')?.invalid && expenseForm.get('expenseName')?.touched"
+                class="invalid-feedback">
+                Expense name is required and must be at least 3 characters long.
+            </div>
+        </div>
+
+        <!-- Price and Date Inputs (Side by Side) -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="expensePrice" class="form-label">Price</label>
+                <input type="number" id="expensePrice" class="form-control" formControlName="expensePrice"
+                    [class.is-invalid]="expenseForm.get('expensePrice')?.invalid && expenseForm.get('expensePrice')?.touched">
+                <div *ngIf="expenseForm.get('expensePrice')?.invalid && expenseForm.get('expensePrice')?.touched"
+                    class="invalid-feedback">
+                    Price must be greater than 0.
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="expenseDate" class="form-label">Expense Date</label>
+                <input type="date" id="expenseDate" class="form-control" formControlName="expenseDate"
+                    [class.is-invalid]="expenseForm.get('expenseDate')?.invalid && expenseForm.get('expenseDate')?.touched">
+                <div *ngIf="expenseForm.get('expenseDate')?.invalid && expenseForm.get('expenseDate')?.touched"
+                    class="invalid-feedback">
+                    Expense date is required.
+                </div>
+            </div>
+        </div>
+
+        <!-- Note Input -->
+        <div class="mb-3">
+            <label for="expenseNote" class="form-label">Note</label>
+            <input id="expenseNote" class="form-control" rows="3" formControlName="expenseNote">
+        </div>
+
+        <!-- Address Input with Suggestions -->
+        <div class="mb-3 position-relative" [formGroup]="addressForm">
+            <label for="addressName" class="form-label">Address</label>
+            <input type="text" id="address" class="form-control" formControlName="addressName" 
+                (input)="onAddressInputChange($event)" autocomplete="off"
+                [class.is-invalid]="expenseForm.get('addressForm')?.invalid && expenseForm.get('addressForm')?.touched">
+        
+                <!-- Address Suggestions Dropdown -->
+            <div *ngIf="showAddressMenu && addressSuggestions.length > 0"
+            class="position-absolute w-100 border rounded shadow-lg mt-1">
+            <ul class="list-group">
+            <li *ngFor="let suggestion of addressSuggestions" class="list-group-item" 
+                (click)="onAddressSelect(suggestion)">
+                <strong>{{ suggestion.addressName }}</strong><br>
+                {{ suggestion.city }}, {{ suggestion.postCode }}
+            </li>
+            </ul>
+        </div>
+        </div>
+
+
+        <!-- Category Dropdown with Add Button -->
+        <div class="mb-3 position-relative">
+            <label for="expenseCategory" class="form-label">Category</label>
+            <div class="d-flex align-items-center">
+                <select id="expenseCategory" class="form-select me-2" formControlName="expenseCategory"
+                    [class.is-invalid]="expenseForm.get('expenseCategory')?.invalid && expenseForm.get('expenseCategory')?.touched">
+                    <option [ngValue]="null" disabled>Select a category</option>
+                    <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}
+                    </option>
+                </select>
+                <button type="button" class="btn btn-outline-secondary" (click)="toggleCategoryMenu()">+</button>
+            </div>
+            <div *ngIf="expenseForm.get('expenseCategory')?.invalid && expenseForm.get('expenseCategory')?.touched"
+                class="invalid-feedback">
+                Please select a category.
+            </div>
+
+            <!-- New Category Menu -->
+            <div *ngIf="showCategoryMenu" class="border rounded p-3 mt-2">
+                <form [formGroup]="categoryForm" (ngSubmit)="createCategory()">
+                    <div class="mb-2">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" id="categoryName" class="form-control" formControlName="categoryName">
+                    </div>
+                    <div class="mb-2">
+                        <label for="categoryDescription" class="form-label">Description (optional)</label>
+                        <textarea id="categoryDescription" class="form-control" rows="2"
+                            formControlName="categoryDescription"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label for="categoryColor" class="form-label">Color</label>
+                        <div class="d-flex align-items-center flex-wrap">
+                            <!-- Color Picker -->
+                            <input type="color" id="categoryColor" class="form-control form-control-color me-3"
+                                formControlName="categoryColor">
+
+                            <!-- Preset Buttons -->
+                            <div class="d-flex align-items-center flex-wrap">
+                                <span *ngFor="let color of colorPresets" class="color-preset me-2"
+                                    [ngStyle]="{'background-color': color}" (click)="setCategoryColor(color)">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-sm"
+                            [disabled]="categoryForm.invalid">Create</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                            (click)="toggleCategoryMenu()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" [disabled]="expenseForm.invalid">Submit</button>
+    </form>
+</div>

@@ -1,0 +1,14 @@
+$primary: #3B4CCA; // Set your desired primary color
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+$yellow-light: #FFDE00;
+$yellow-dark:#B3A125;
+$red-dark: #CC0000;
+$red-light: #FF0000;
+
+body {
+    background-color: #212529; /* Replace with your desired color */
+    color: #ffffff; /* Optional: Adjust text color to match background */
+    margin: 0; /* Remove margin, often added by default */
+}

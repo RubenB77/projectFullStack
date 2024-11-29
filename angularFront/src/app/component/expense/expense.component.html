@@ -1,0 +1,72 @@
+<div *ngIf="expenses.length > 0; else noExpenses">
+    <div class="d-flex justify-content-end gap-3 mb-1 me-3">
+        <button type="button" class="btn btn-primary" routerLink="/user/expenses/add">Add Expense</button>
+    </div>
+    <div class="expense-table-container">
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th style="width:10%" (click)="sort('createdAt')"
+                        [class.active]="currentSortColumn === 'createdAt'">
+                        Date
+                        <span *ngIf="currentSortColumn === 'createdAt'">
+                            {{ isAscending ? '▲' : '▼' }}
+                        </span>
+                    </th>
+                    <th style="width:15%" (click)="sort('expenseName')"
+                        [class.active]="currentSortColumn === 'expenseName'">
+                        Expense Name
+                        <span *ngIf="currentSortColumn === 'expenseName'">
+                            {{ isAscending ? '▲' : '▼' }}
+                        </span>
+                    </th>
+                    <th style="width:10%" (click)="sort('expensePrice')">
+                        Price
+                        <span *ngIf="currentSortColumn === 'expensePrice'"
+                            [class.active]="currentSortColumn === 'expensePrice'">
+                            {{ isAscending ? '▲' : '▼' }}
+                        </span>
+                    </th>
+                    <th (click)="sort('expenseNote')" [class.active]="currentSortColumn === 'expenseNote'">
+                        Note
+                        <span *ngIf="currentSortColumn === 'expenseNote'">
+                            {{ isAscending ? '▲' : '▼' }}
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let expense of expenses; let i = index" [class.odd]="i % 2 === 1">
+                    <td *ngFor="let cell of [expense.expenseDate | date:'dd/MM/yyyy', expense.expenseName, expense.expensePrice | currency, expense.expenseNote]"
+                        [ngStyle]="{
+                            'background-color': expense.expenseCategory?.categoryColor || '#e0e0e0',
+                            'color': getTextColor(expense.expenseCategory?.categoryColor || '#e0e0e0'),
+                            'border-bottom-left-radius': isLastRow(i) && isFirstCell(cell) ? '12px' : null,
+                            'border-bottom-right-radius': isLastRow(i) && isLastCell(cell) ? '12px' : null
+                        }">
+                        {{ cell }}
+                    </td>
+                    <!-- Eye Button Column
+                    <td>
+                        <button 
+                            type="button" 
+                            class="btn btn-outline-primary btn-sm" 
+                            (click)="openExpenseDetails(expense)">
+                            <img src="eye.svg" alt="View Details" style="width: 20px; height: 20px;" />
+                        </button>
+                    </td> -->
+                </tr>
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+<ng-template #noExpenses>
+    <div class="alert alert-dark text-dark ms-4 me-4 text-center" role="alert">
+        No expenses found.
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <button type="button" class="btn btn-primary" routerLink="/user/expenses/add">Add Expense</button>
+    </div>
+</ng-template>

@@ -1,0 +1,63 @@
+$color-light: #E0479E;
+
+// Card styling
+.signup-card {
+    max-width: 380px;
+    width: 100%;
+}
+
+// Floating Label Styles
+.floating-label-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+
+    // Styling the input fields
+    .form-control {
+        border: 2px solid #ced4da;
+        padding: 1.25rem 0.75rem 0.5rem; // Extra padding-top for centered alignment
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: $color-light;
+            box-shadow: none;
+        }
+    }
+
+    // Styling the floating label
+    .floating-label {
+        position: absolute;
+        top: 1rem; // Adjusted for centered alignment with input text
+        left: 0.75rem;
+        font-size: 1rem;
+        color: #6c757d;
+        transition: 0.2s ease all;
+        pointer-events: none;
+        transform: translateY(0); // Start in line with input text
+        background-color: #fff;
+        padding: 0 0.25rem;
+    }
+
+    // Floating label animation
+    .form-control:focus ~ .floating-label,
+    .form-control:not(:placeholder-shown) ~ .floating-label {
+        top: -8px; // Adjusted top position to float above the input
+        left: 0.5rem;
+        font-size: 0.75rem;
+        color: $color-light;
+        background-color: #fff;
+        padding: 0 0.25rem;
+    }
+}
+
+// Styling for error messages to ensure spacing
+.form-control.ng-invalid.ng-touched {
+    border-color: #dc3545; // Red color for invalid inputs
+}
+
+.error-message {
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+    padding-left: 0.75rem;
+}

@@ -1,0 +1,32 @@
+<body>
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-5 navBarTop">
+		<a routerLink="/home" class="nav-link" routerLinkActive="active">
+			<img src="pokeball.png" height="30" class="d-inline-block align-top ms-2" alt="Logo">
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+			aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbar">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item">
+					<a routerLink="/home" class="nav-link" routerLinkActive="active">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" routerLink="/user/expenses">Expenses</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" routerLink="/user/map">Map</a>
+				</li>
+			</ul>
+
+			<form class="d-flex" role="search">
+				<a routerLink="/login" class="nav-link" routerLinkActive="active">
+					<img src="profile.svg" height="30" class="d-inline-block align-top me-3" alt="Logo">
+				</a>
+			</form>
+		</div>
+	</nav>
+	<router-outlet></router-outlet>
+</body>
