@@ -8,6 +8,7 @@ import { ExpenseComponent } from './component/expense/expense.component';
 import { AddExpenseComponent } from './component/add-expense/add-expense.component';
 import { AuthGuard } from './auth.guard';
 import { MapComponent } from './component/map/map.component';
+import { ProfileComponent } from './component/profile/profile.component';
 
 
 // Define application routes directly in main.ts
@@ -19,8 +20,9 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
     { path: 'user/expenses', component: ExpenseComponent, canActivate:[AuthGuard]},
-    { path:'user/expenses/add', component: AddExpenseComponent, canActivate:[AuthGuard]},
+    { path: 'user/expenses/add', component: AddExpenseComponent, canActivate:[AuthGuard]},
     { path:'user/map', component: MapComponent, canActivate:[AuthGuard]},
+    { path:'user/profile', component: ProfileComponent, canActivate:[AuthGuard]},
     { path: '**', redirectTo: 'login'}
   ];
   

@@ -25,7 +25,7 @@ export class MapComponent implements OnInit {
 		const userId = parseInt(localStorage.getItem('userId')!, 10);
 		
 		const loader = new Loader({
-			apiKey: process.env.MAP_KEY,
+			apiKey: api_key,
 			version: 'weekly',
 		});
 

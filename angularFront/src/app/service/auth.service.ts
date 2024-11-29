@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,28 +15,32 @@ export class AuthService {
         this.checkAuthStatus(); 
     }
 
-    public checkAuthStatus(): void {
-        this.http
+    public checkAuthStatus(): Observable<boolean> {
+        return this.http
             .get<{ success?: string; userId?: string; error?: string }>(
                 `${this.baseUrl}/auth/check`,
                 { withCredentials: true } 
             )
-            .subscribe({
-                next: (response) => {
+            .pipe(
+                map((response) => {
                     if (response.success && response.userId) {
-                        this.isAuthenticated.next(true); 
+                        this.isAuthenticated.next(true);
                         localStorage.setItem('userId', response.userId);
+                        return true;
                     } else {
-                        this.isAuthenticated.next(false); 
-                        localStorage.removeItem('userId'); 
+                        this.isAuthenticated.next(false);
+                        localStorage.removeItem('userId');
+                        return false;
                     }
-                },
-                error: () => {
-                    this.isAuthenticated.next(false); 
-                    localStorage.removeItem('userId'); 
-                },
-            });
+                }),
+                catchError(() => {
+                    this.isAuthenticated.next(false);
+                    localStorage.removeItem('userId');
+                    return of(false); // Return false if there's an error
+                })
+            );
     }
+    
 
     public login(username: string, password: string): Observable<boolean> {
         const body = { username, password };
