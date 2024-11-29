@@ -1,4 +1,4 @@
-# Full stack project using angular 18 and java spring boot :rocket:
+# Full stack project using angular 18 and java spring boot
 
 ## Technologies Used :computer:
 
