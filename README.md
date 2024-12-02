@@ -1,28 +1,26 @@
-# Full stack project using angular 18 and java spring boot :rocket:
+# Full stack project using angular 18 and java spring boot
 
-## Technologies Used :computer:
+## Technologies Used 
 
--   Angular18 :atom_symbol:
--   Java Spring Boot :leaves:
--   TypeScript :blue_book:
--   Java :robot:
--   PostGreSQL :elephant:
+-   Angular18 
+-   Java Spring Boot 
+-   TypeScript 
+-   Java 
+-   PostGreSQL 
 
 
-## Installation :wrench:
+## Description
 
-1. Clone the repository: `git clone https://github.com/RubenB77/projectFullStack.git`
-2. Navigate to frontend app directory: `cd angularFront`
-3. Install dependencies: `npm install`
-4. Start the angular server: `ng serve`
-5. Open a new terminal in the root directory of the project
-6. Navigate to backend app: `cd springBack`
-7. Install the dependencies: `mvn clean install`
-8. Launch the development server: `mvn spring-boot:run`
+This project is a full-stack application designed to manage and track expenses efficiently. The end goal of this project is to use google maps APIs to visualize these expenses on a map. 
 
-For the project to be fully operationnal a postGreSQL database in the root directory is needed, the credentials should be added to the applications.properties file in the root of the backend app.
+The application allows users to:
 
-## Usage :bulb:
+    Create accounts and manage secure logins.
+    Add and categorize expenses.
+    Use "addresse.data.gouv.fr" APIs to retrieve address lcoations and visualize them using google maps APIs.
+
+
+## Usage 
 
 To use this website:
 -   register using the icone in the top right corner and selecting sign up
