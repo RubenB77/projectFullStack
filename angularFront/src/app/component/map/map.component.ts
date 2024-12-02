@@ -52,6 +52,7 @@ export class MapComponent implements OnInit {
 	}
 
 	private addMarkers(expenses: Expense[]): void {
+		const infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
 		expenses
 			.filter((expense) => expense.expenseAddress !== null)
 			.forEach((expense) => {
@@ -62,11 +63,32 @@ export class MapComponent implements OnInit {
 					background: color,
 				});
 
-				new this.AdvancedMarkerElement({
+				const marker = new this.AdvancedMarkerElement({
 					map: this.map,
 					position: { lat, lng },
 					content: pinBackground.element,
+					gmpClickable: true,
 				});
+
+				marker.addListener('click', () => {
+					infoWindow.setContent(`
+						<div style="font-size: 14px; color: black; background-color: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); cursor: pointer;">
+						<h4>${expense.expenseName}</h4>
+						<p><strong>Amount:</strong> €${expense.expensePrice?.toFixed(2) || '0.00'}</p>
+						<p><strong>Date:</strong> ${expense.expenseDate || 'Unknown Date'}</p>
+						<p><strong>Description:</strong> ${expense.expenseAddress}</p>
+					</div>
+					`);
+					infoWindow.setPosition({ lat, lng });
+					infoWindow.open(marker.map);
+
+					google.maps.event.addListener(infoWindow, 'domready', () => {
+						const contentElement = document.querySelector('.gm-style-iw');
+						if (contentElement) {
+							contentElement.addEventListener('click', () => infoWindow.close());
+						}
+					});
+				})
 			});
 	}
 }
