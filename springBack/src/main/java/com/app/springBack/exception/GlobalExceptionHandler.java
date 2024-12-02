@@ -49,7 +49,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>("Access Denied: " + ex.getMessage(), HttpStatus.FORBIDDEN);
+    public ResponseEntity<LinkedHashMap<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+        LinkedHashMap<String, String> response = new LinkedHashMap<>();
+        response.put("Access Denied:", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 }
