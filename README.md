@@ -14,10 +14,9 @@
 This project is a full-stack application designed to manage and track expenses efficiently. The end goal of this project is to use google maps APIs to visualize these expenses on a map. 
 
 The application allows users to:
-
-    Create accounts and manage secure logins.
-    Add and categorize expenses.
-    Use "addresse.data.gouv.fr" APIs to retrieve address lcoations and visualize them using google maps APIs.
+-    Create accounts and manage secure logins.
+-    Add and categorize expenses.
+-    Use "addresse.data.gouv.fr" APIs to retrieve address lcoations and visualize them using google maps APIs.
 
 
 ## Usage 
