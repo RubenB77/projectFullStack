@@ -12,35 +12,37 @@ $color-light: #3B4CCA;
     position: relative;
     margin-bottom: 1.5rem;
 
-.form-control {
-    border: 2px solid #ced4da;
-    padding: 1rem 0.75rem;
-    &:focus {
-    outline: none;
-    border-color: $color-light;
-    box-shadow: none;
+    .form-control {
+        border: 2px solid #ced4da;
+        padding: 1rem 0.75rem;
+
+        &:focus {
+            outline: none;
+            border-color: $color-light;
+            box-shadow: none;
+        }
+    }
+
+    .floating-label {
+        position: absolute;
+        top: 50%;
+        left: 0.75rem;
+        font-size: 1rem;
+        transition: 0.2s ease all;
+        pointer-events: none;
+        transform: translateY(-50%);
+        background-color: transparent;
+        padding: 0 0.25rem;
+    }
+
+    .form-control:focus~.floating-label,
+    .form-control:not(:placeholder-shown)~.floating-label {
+        top: -10px;
+        left: 0.5rem;
+        font-size: 0.75rem;
+        color: $color-light;
+        transform: translateY(0);
+        background-color: #fff;
     }
 }
 
-.floating-label {
-    position: absolute;
-    top: 50%;
-    left: 0.75rem;
-    font-size: 1rem;
-    transition: 0.2s ease all;
-    pointer-events: none;
-    transform: translateY(-50%);
-    background-color: transparent;
-    padding: 0 0.25rem; 
-}
-
-.form-control:focus ~ .floating-label,
-.form-control:not(:placeholder-shown) ~ .floating-label {
-    top: -10px;
-    left: 0.5rem;
-    font-size: 0.75rem;
-    color: $color-light;
-    transform: translateY(0);
-    background-color: #fff; 
-}
-}
