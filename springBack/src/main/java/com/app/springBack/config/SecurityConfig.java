@@ -1,6 +1,7 @@
 package com.app.springBack.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -10,15 +11,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.app.springBack.auth.*;
+import com.app.springBack.service.AuthServiceUser;
 import com.app.springBack.service.CustomUserDetailsService;
 
 
-@Component
+@Configuration
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
@@ -36,6 +37,11 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthServiceUser authServiceUser() {
+        return new AuthServiceUser();
     }
 
     @Bean

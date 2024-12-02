@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +53,8 @@ public class CategoryController {
         return this.categoryService.updateCategory(id, categoryDto);
     }
 
-    @GetMapping("/user/{id}/categories") 
+    @GetMapping("/user/{id}/categories")
+    @PreAuthorize("@authServiceUser.isRightUser(#userId)")
     public Iterable<CategoryDto> getUserCategories(@Valid @PathVariable("id") int userId){
         return this.categoryService.getCategoriesByUserId(userId)
                 .stream()
@@ -61,6 +63,7 @@ public class CategoryController {
     }
 
     @PostMapping("/user/{id}/category")
+    @PreAuthorize("@authServiceUser.isRightUser(#userId)")
     public Category postCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable("id") int userId) {
         Category category = this.categoryService.createCategoryFromDto(categoryDto, userId);
         return this.categoryRepository.save(category);
