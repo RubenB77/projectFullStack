@@ -9,9 +9,11 @@ import com.app.springBack.dto.ExpenseDtoInput;
 import com.app.springBack.model.Category;
 import com.app.springBack.model.User;
 import com.app.springBack.repository.CategoryRepository;
+import com.app.springBack.repository.ExpenseRepository;
 import com.app.springBack.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
+@SuppressWarnings("unused")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ExpenseControllerTest {
@@ -37,9 +40,11 @@ public class ExpenseControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;  // Ensure you have access to this
+    private UserRepository userRepository;  
     @Autowired
-    private CategoryRepository categoryRepository;  // Ensure you have access to this
+    private CategoryRepository categoryRepository;  
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     private User testUser;
     private Category testCategory;
@@ -61,11 +66,18 @@ public class ExpenseControllerTest {
         LoginDto loginDto = new LoginDto("johnD", "Password123");  // Assuming this is your Login DTO
         String json = new ObjectMapper().writeValueAsString(loginDto);
 
-        MvcResult result = mockMvc.perform(post("/login")
+        mockMvc.perform(post("/login")
                 .contentType("application/json")
                 .content(json))
                 .andExpect(status().isOk())
                 .andReturn();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        categoryRepository.deleteAll(); 
+        userRepository.deleteAll();    
+        expenseRepository.deleteAll();
     }
 
     @Test

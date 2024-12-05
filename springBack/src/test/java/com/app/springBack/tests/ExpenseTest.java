@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,13 @@ public class ExpenseTest {
          categoryRepository.save(category);
     }
 
-    // @AfterEach
-    // public void AfterEach() {
-    //     categoryRepository.delete(category);
-    //     userRepository.delete(user);
-    // }
+    @AfterEach
+    public void afterEach() {
+        categoryRepository.deleteAll(); 
+        userRepository.deleteAll();    
+        expenseRepository.deleteAll();
+    }
+
 
     @Test
     public void testCreateExpense() {
