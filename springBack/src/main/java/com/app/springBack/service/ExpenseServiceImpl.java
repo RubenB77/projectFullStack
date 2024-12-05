@@ -46,7 +46,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         User user = this.userRepository.findById(expenseDto.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with id %d not found", expenseDto.getUserId())));
-        ;
 
         return new Expense(expenseDto, category, user);
     }
