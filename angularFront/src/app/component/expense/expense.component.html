@@ -33,6 +33,9 @@
                             {{ isAscending ? '▲' : '▼' }}
                         </span>
                     </th>
+                    <th style="width:10%">
+                        Details
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -42,23 +45,50 @@
                             'background-color': expense.expenseCategory?.categoryColor || '#e0e0e0',
                             'color': getTextColor(expense.expenseCategory?.categoryColor || '#e0e0e0'),
                             'border-bottom-left-radius': isLastRow(i) && isFirstCell(cell) ? '12px' : null,
-                            'border-bottom-right-radius': isLastRow(i) && isLastCell(cell) ? '12px' : null
+                            
                         }">
                         {{ cell }}
                     </td>
-                    <!-- Eye Button Column
-                    <td>
-                        <button 
-                            type="button" 
-                            class="btn btn-outline-primary btn-sm" 
-                            (click)="openExpenseDetails(expense)">
+                    <!--'border-bottom-right-radius': isLastRow(i) && isLastCell(cell) ? '12px' : null-->
+                    <!-- Eye Button Column -->
+                    <td [ngStyle]="{
+                            'background-color': expense.expenseCategory?.categoryColor || '#e0e0e0',
+                            'color': getTextColor(expense.expenseCategory?.categoryColor || '#e0e0e0')
+                        }">
+                        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openModal(expense)"
+                            data-bs-toggle="modal" data-bs-target="#expenseDetailsModal">
                             <img src="eye.svg" alt="View Details" style="width: 20px; height: 20px;" />
                         </button>
-                    </td> -->
+                    </td>
                 </tr>
             </tbody>
-            
         </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="expenseDetailsModal" tabindex="-1" aria-labelledby="expenseDetailsModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="expenseDetailsModal"> {{ selectedExpense?.expenseName }} </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Category: {{ selectedExpense?.expenseCategory?.categoryName }}</p>
+                <p>Date: {{ selectedExpense?.expenseDate | date:'dd/MM/yyyy' }}</p>
+                <p>Price: {{ selectedExpense?.expensePrice | currency }}</p>
+                <p *ngIf="selectedExpense?.expenseNote">Note: {{ selectedExpense?.expenseNote }}</p>
+
+                <div *ngIf="selectedExpense?.expenseAddress" class="map-container">
+                    <div #expenseMapContainer style="width: 100%; height: 300px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>
 

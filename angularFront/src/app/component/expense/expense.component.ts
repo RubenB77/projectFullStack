@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
@@ -14,18 +14,22 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 	styleUrls: ['./expense.component.scss']
 })
 export class ExpenseComponent {
+	@ViewChild('expenseMapContainer', { static: false }) mapContainer!: ElementRef;
 
 	expenses: Expense[] = [];
-	selectedExpense: Expense | null = null; 
-    expenseDetailForm: FormGroup;
+	selectedExpense: Expense | null = null;
+	expenseDetailForm: FormGroup;
+	map!: google.maps.Map;
+	AdvancedMarkerElement!: typeof google.maps.marker.AdvancedMarkerElement;
+	PinElement!: typeof google.maps.marker.PinElement;
 
-	constructor(private fb: FormBuilder, public authService: AuthService, private router: Router, public expenseService: ExpenseService) { 
+	constructor(private fb: FormBuilder, public authService: AuthService, private router: Router, public expenseService: ExpenseService) {
 		this.expenseDetailForm = this.fb.group({
-            expenseName: [''],
-            expensePrice: [null],
-            expenseDate: [''],
-            expenseNote: ['']
-        });
+			expenseName: [''],
+			expensePrice: [null],
+			expenseDate: [''],
+			expenseNote: ['']
+		});
 	}
 
 	ngOnInit(): void {
@@ -76,6 +80,12 @@ export class ExpenseComponent {
 		});
 	}
 
+	async ngAfterViewInit(): Promise<void> {
+		if (this.selectedExpense?.expenseAddress) {
+			await this.initializeMap();
+		}
+	}
+
 
 	getTextColor(backgroundColor: string): string {
 		if (!backgroundColor) {
@@ -110,5 +120,47 @@ export class ExpenseComponent {
 		this.authService.isAuthenticated$.subscribe(
 			value => console.log(value)
 		)
+	}
+
+	openModal(expense: any) {
+		this.selectedExpense = expense;
+		setTimeout(() => {
+			if (this.selectedExpense?.expenseAddress) {
+				this.initializeMap();
+			}
+		}, 300);
+	}
+
+	async initializeMap(): Promise<void> {
+		const { Map } = await google.maps.importLibrary('maps') as google.maps.MapsLibrary;
+		const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary('marker') as any;
+
+		this.AdvancedMarkerElement = AdvancedMarkerElement;
+		this.PinElement = PinElement;
+
+		const { latitude: lat, longitude: lng } = this.selectedExpense!.expenseAddress!;
+
+		// Create the map centered at the selected expense address
+		this.map = new Map(this.mapContainer.nativeElement, {
+			center: { lat, lng },
+			zoom: 15,
+			mapId: 'DEMO_MAP_ID', // Replace with your custom Map ID if applicable
+		});
+
+		// Add a marker
+		this.addMarker(lat, lng);
+	}
+
+	addMarker(lat: number, lng: number): void {
+		const pinBackground = new this.PinElement({
+			background: '#FF5733', // Customize pin color
+		});
+
+		const marker = new this.AdvancedMarkerElement({
+			map: this.map,
+			position: { lat, lng },
+			content: pinBackground.element,
+			gmpClickable: true,
+		});
 	}
 }

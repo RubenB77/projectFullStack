@@ -76,7 +76,7 @@ export class MapComponent implements OnInit {
 						<h4>${expense.expenseName}</h4>
 						<p><strong>Amount:</strong> €${expense.expensePrice?.toFixed(2) || '0.00'}</p>
 						<p><strong>Date:</strong> ${expense.expenseDate || 'Unknown Date'}</p>
-						<p><strong>Description:</strong> ${expense.expenseAddress}</p>
+						<p><strong>Address:</strong> ${expense.expenseAddress?.addressName}</p>
 					</div>
 					`);
 					infoWindow.setPosition({ lat, lng });
