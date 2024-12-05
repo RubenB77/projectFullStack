@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,9 +66,11 @@ public class CategoryController {
 
     @PostMapping("/user/{id}/category")
     @PreAuthorize("@authServiceUser.isRightUser(#userId)")
-    public Category postCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable("id") int userId) {
+    public ResponseEntity<Category> postCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable("id") int userId) {
         Category category = this.categoryService.createCategoryFromDto(categoryDto, userId);
-        return this.categoryRepository.save(category);
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(this.categoryRepository.save(category));
     }
 
 }
