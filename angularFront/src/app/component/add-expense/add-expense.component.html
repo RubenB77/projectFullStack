@@ -69,7 +69,7 @@
             <div class="d-flex align-items-center">
                 <select id="expenseCategory" class="form-select me-2" formControlName="expenseCategory"
                     [class.is-invalid]="expenseForm.get('expenseCategory')?.invalid && expenseForm.get('expenseCategory')?.touched">
-                    <option [ngValue]="null" disabled>Select a category</option>
+                    <option [ngValue]="" disabled>Select a category</option>
                     <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}
                     </option>
                 </select>

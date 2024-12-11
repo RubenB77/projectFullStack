@@ -72,10 +72,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (addressDto != null) {
             Address address;
             Optional<Address> existingAddress = this.addressRepository.findByAddressName(addressDto.getAddressName());
-            if(existingAddress.isPresent()) {
+            if (existingAddress.isPresent()) {
                 address = existingAddress.get();
-            }
-            else {
+            } else {
                 address = new Address(addressDto);
             }
             Address savedAddress = this.addressRepository.save(address);
@@ -88,6 +87,47 @@ public class ExpenseServiceImpl implements ExpenseService {
         ExpenseDto expenseDto = new ExpenseDto(expense);
 
         return expenseDto;
+    }
+
+    @Override
+    public ExpenseDto updateExpense(int expenseId, ExpenseDtoInput expenseDtoInput) {
+        System.out.println(expenseId);
+        // Fetch the existing expense
+        Expense existingExpense = this.expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Expense with id %d not found", expenseId)));
+
+        // Fetch the category
+        Category category = this.categoryRepository.findById(expenseDtoInput.getCategoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Category with id %d not found", expenseDtoInput.getCategoryId())));
+
+        // Update or clear address
+        AddressDto addressDto = expenseDtoInput.getExpenseAddress();
+        if (addressDto != null) {
+            Address address = this.addressRepository.findByAddressName(addressDto.getAddressName())
+                    .orElseGet(() -> new Address(addressDto));
+            Address savedAddress = this.addressRepository.save(address);
+            existingExpense.setExpenseAdress(savedAddress);
+        } 
+        else {
+            existingExpense.setExpenseAdress(null);
+        }
+
+        // Update other fields
+        existingExpense.setExpenseName(expenseDtoInput.getExpenseName());
+        existingExpense.setExpensePrice(expenseDtoInput.getExpensePrice());
+        existingExpense.setExpenseNote(expenseDtoInput.getExpenseNote());
+        existingExpense.setExpenseCategory(category);
+        existingExpense.setExpenseDate(expenseDtoInput.getExpenseDate());
+
+        System.out.println(existingExpense.getExpenseName());
+
+        // Save the updated expense
+        Expense updatedExpense = this.expenseRepository.save(existingExpense);
+
+        // Convert to DTO and return
+        return new ExpenseDto(updatedExpense);
     }
 
 }

@@ -20,6 +20,15 @@ export class ExpenseService {
         return this.http.post<Expense>(
             `${this.baseUrl}/user/${userId}/expense`, 
             expense,
-            {withCredentials: true});
+            {withCredentials: true}
+        );
+    }
+
+    updateExpense(userId: number, expenseId: number, updatedExpense: Partial<Expense>): Observable<Expense> {
+        return this.http.put<Expense>(
+            `${this.baseUrl}/user/${userId}/expense/${expenseId}`, 
+            updatedExpense,
+            {withCredentials: true}
+        );
     }
 }

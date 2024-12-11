@@ -13,5 +13,6 @@ import com.app.springBack.dto.ExpenseDtoInput;
 public interface ExpenseService {
     public Expense createExpenseFromDto(ExpenseDto expenseDto);
     public ExpenseDto createExpenseFromDtoInput(int userId, ExpenseDtoInput expenseDtoInput);
+    public ExpenseDto updateExpense(int userId, ExpenseDtoInput expenseDtoInput);
     public List<Expense> getExpensesByUserId(int userId);
 }

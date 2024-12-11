@@ -50,6 +50,7 @@ public class ExpenseDto {
     }
 
     public ExpenseDto(Expense expense) {
+        this.expenseId = expense.getId();
         this.expenseName = expense.getExpenseName();
         this.expensePrice = expense.getExpensePrice();
         this.expenseNote = expense.getExpenseNote();
@@ -62,6 +63,10 @@ public class ExpenseDto {
             this.userId = expense.getUser().getId();
         }
         this.createdAt = expense.getCreationDate();
+    }
+
+    public int getExpenseId() {
+        return this.expenseId;
     }
 
     public String getExpenseName() {

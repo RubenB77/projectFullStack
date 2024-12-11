@@ -5,6 +5,9 @@ import { AuthService } from '../../service/auth.service';
 import { ExpenseService } from '../../service/expense.service';
 import { Expense } from '../../model/expense';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Category } from '../../model/category';
+import { CategoryService } from '../../service/category.service';
+declare var bootstrap: any;
 
 @Component({
 	selector: 'app-home',
@@ -22,11 +25,13 @@ export class ExpenseComponent {
 	map!: google.maps.Map;
 	AdvancedMarkerElement!: typeof google.maps.marker.AdvancedMarkerElement;
 	PinElement!: typeof google.maps.marker.PinElement;
+	categories: Category[] = [];
 
-	constructor(private fb: FormBuilder, public authService: AuthService, private router: Router, public expenseService: ExpenseService) {
+	constructor(private fb: FormBuilder, public authService: AuthService, private router: Router, public expenseService: ExpenseService, public categoryService: CategoryService) {
 		this.expenseDetailForm = this.fb.group({
 			expenseName: [''],
 			expensePrice: [null],
+			expenseCategory: [null],
 			expenseDate: [''],
 			expenseNote: ['']
 		});
@@ -46,6 +51,14 @@ export class ExpenseComponent {
 					console.error('Error fetching expenses', err);
 				}
 			});
+			this.categoryService.getCategoriesByUserId(userId).subscribe({
+                next: categories => {
+                    this.categories = categories;
+                },
+                error: (err) => {
+                    console.error('Error fetching categories', err);
+                }
+            });
 		} else {
 			console.error('User ID not found in localStorage');
 		}
@@ -122,14 +135,59 @@ export class ExpenseComponent {
 		)
 	}
 
-	openModal(expense: any) {
+	openModal(expense: Expense): void {
 		this.selectedExpense = expense;
+		this.expenseDetailForm.get('expenseCategory')?.setValue(expense?.expenseCategory || "");
+	
+		this.expenseDetailForm.patchValue({
+			expenseName: expense.expenseName,
+			expenseCategory: expense.expenseCategory,
+			expensePrice: expense.expensePrice,
+			expenseDate: expense.expenseDate,
+			expenseNote: expense.expenseNote
+		});
+	
 		setTimeout(() => {
 			if (this.selectedExpense?.expenseAddress) {
 				this.initializeMap();
 			}
 		}, 300);
 	}
+	
+	
+	saveChanges(): void {
+		if (this.expenseDetailForm.valid && this.selectedExpense) {
+			const { expenseCategory, ...expenseDetails } = this.expenseDetailForm.value;
+			const updatedExpense = {
+				...this.selectedExpense,
+				...expenseDetails,
+				categoryId: this.expenseDetailForm.value.expenseCategory?.categoryId || this.selectedExpense.expenseCategory!.categoryId,
+			};
+
+			const userId = parseInt(localStorage.getItem('userId')!, 10);
+	
+			this.expenseService.updateExpense(userId, this.selectedExpense.expenseId!, updatedExpense).subscribe({
+				next: (response) => {
+					// Update the local expense list with the updated expense
+					const index = this.expenses.findIndex(e => e.expenseId === this.selectedExpense?.expenseId);
+					if (index !== -1) {
+						this.expenses[index] = response;
+					}
+	
+					// Close the modal
+					const modalElement = document.getElementById('expenseDetailsModal');
+					if (modalElement) {
+						const modal = bootstrap.Modal.getInstance(modalElement);
+						modal?.hide();
+					}
+				},
+				error: (err) => {
+					console.error('Error updating expense:', err);
+				},
+			});
+		}
+	}
+	
 
 	async initializeMap(): Promise<void> {
 		const { Map } = await google.maps.importLibrary('maps') as google.maps.MapsLibrary;

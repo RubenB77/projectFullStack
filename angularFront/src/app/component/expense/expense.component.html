@@ -71,26 +71,62 @@
     <div class="modal-dialog">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header">
-                <h5 class="modal-title" id="expenseDetailsModal"> {{ selectedExpense?.expenseName }} </h5>
+                <h5 class="modal-title" id="expenseDetailsModal">{{ selectedExpense?.expenseName }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Category: {{ selectedExpense?.expenseCategory?.categoryName }}</p>
-                <p>Date: {{ selectedExpense?.expenseDate | date:'dd/MM/yyyy' }}</p>
-                <p>Price: {{ selectedExpense?.expensePrice | currency }}</p>
-                <p *ngIf="selectedExpense?.expenseNote">Note: {{ selectedExpense?.expenseNote }}</p>
+                <!-- Editable Fields -->
+                <form [formGroup]="expenseDetailForm">
+                    <!-- Expense Name -->
+                    <div class="mb-3">
+                        <label for="expenseName" class="form-label">Name</label>
+                        <input type="text" id="expenseName" class="form-control" formControlName="expenseName" />
+                    </div>
+
+                    <!-- Category Dropdown -->
+                    <div class="mb-3">
+                        <label for="expenseCategory" class="form-label">Category</label>
+                        <select id="expenseCategory" class="form-select" formControlName="expenseCategory">
+                            <option [ngValue]="selectedExpense?.expenseCategory || ''" disabled>{{selectedExpense?.expenseCategory?.categoryName || ''}}</option>
+                            <option *ngFor="let category of categories" [ngValue]="category">
+                                {{ category.categoryName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Expense Price -->
+                    <div class="mb-3">
+                        <label for="expensePrice" class="form-label">Price</label>
+                        <input type="number" id="expensePrice" class="form-control" formControlName="expensePrice" />
+                    </div>
+
+                    <!-- Expense Date -->
+                    <div class="mb-3">
+                        <label for="expenseDate" class="form-label">Date</label>
+                        <input type="date" id="expenseDate" class="form-control" formControlName="expenseDate" />
+                    </div>
+
+                    <!-- Expense Note -->
+                    <div class="mb-3">
+                        <label for="expenseNote" class="form-label">Note</label>
+                        <textarea id="expenseNote" class="form-control" formControlName="expenseNote"></textarea>
+                    </div>
+                </form>
 
                 <div *ngIf="selectedExpense?.expenseAddress" class="map-container">
                     <div #expenseMapContainer style="width: 100%; height: 300px;"></div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" (click)="saveChanges()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <ng-template #noExpenses>
     <div class="alert alert-dark text-dark ms-4 me-4 text-center" role="alert">
