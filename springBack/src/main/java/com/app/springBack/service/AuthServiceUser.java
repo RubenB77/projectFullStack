@@ -10,7 +10,7 @@ import com.app.springBack.model.UserDetailsImpl;
 public class AuthServiceUser {
 
     /**
-     *  
+     *  Function to check if the userId in the url is the same as the logged user (in the authentication context)
      * @param userId The userId from the url
      * @return boolean true if the userId corresponds to the logged user false otherwise
      */
