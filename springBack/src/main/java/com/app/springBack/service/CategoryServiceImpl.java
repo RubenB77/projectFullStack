@@ -28,6 +28,11 @@ public class CategoryServiceImpl implements CategoryService{
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with id %d not found", categoryId)));
     }
 
+    /**
+     * @param categoryId the Id of the category to update
+     * @param categoryDto the DTO Object containing the informations of the update
+     * @return The updated Category
+     */
     @Override
     public Category updateCategory(int categoryId, CategoryDto updatedCategory) {
         Category category = this.findCategoryById(categoryId);

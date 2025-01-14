@@ -37,6 +37,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    /**
+     * Function to create an Expense
+     * @param expenseDto the DTO object containg the infos to create the Expense
+     * @return Expense the created Expense
+     */
     public Expense createExpenseFromDto(ExpenseDto expenseDto) {
 
         Category category = this.categoryRepository.findById(expenseDto.getExpenseCategory().getCategoryId())
@@ -51,11 +56,21 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    /**
+     * Function to retrieve the list of expenses of the user
+     * @param int The Id of the user of which we want to retrieve the expenses
+     * @return List<Expense> The expenses of the user
+     */
     public List<Expense> getExpensesByUserId(int userId) {
         return expenseRepository.findByUserId(userId);
     }
 
     @Override
+    /**
+     * @param userId the Id of the User who is creating the Expense
+     * @param expenseDtoInput the DTO object containing the informatiosn to create the Expense
+     * @return ExpenseDto the DTO object containing the information of the Expense created to return
+     */
     public ExpenseDto createExpenseFromDtoInput(int userId, ExpenseDtoInput expenseDtoInput) {
 
         Category category = this.categoryRepository.findById(expenseDtoInput.getCategoryId())
@@ -90,6 +105,12 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
+    /**
+     * Function to update an Expense
+     * @param expenseId The Id of the expense to update
+     * @param expenseDtoInput The DTO object containing the informations with which to update the expense
+     * @return ExpenseDto The DTO object containing the informations to return 
+     */
     public ExpenseDto updateExpense(int expenseId, ExpenseDtoInput expenseDtoInput) {
         System.out.println(expenseId);
         // Fetch the existing expense

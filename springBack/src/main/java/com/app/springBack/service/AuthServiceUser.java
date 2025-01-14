@@ -9,6 +9,11 @@ import com.app.springBack.model.UserDetailsImpl;
 @Service
 public class AuthServiceUser {
 
+    /**
+     *  
+     * @param userId The userId from the url
+     * @return boolean true if the userId corresponds to the logged user false otherwise
+     */
     public boolean isRightUser(int userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDetailsImpl)) {

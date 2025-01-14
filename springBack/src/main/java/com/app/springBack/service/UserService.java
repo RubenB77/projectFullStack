@@ -27,11 +27,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Function to get a USer using the Username
+     * @param username The username of the User
+     * @return The retrieved User
+     */
     public User getByUsername(String username) {
         return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("User of username %s not found", username)));
 
     }
 
+    /**
+     * Function to get a USer entity using the Id
+     * @param userId the Id of the user to update
+     * @return The User retrieved user
+     */
     public User getByUserId(int userId) {
         return this.userRepository.findById(userId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,

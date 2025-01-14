@@ -15,8 +15,13 @@ public class UserSecurityService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 
+     * @param authentication the authentication context
+     * @param id the Id to compare with the User in the Authentication context
+     * @return
+     */
     public boolean isLoggedUser(Authentication authentication, Long id) {
-        System.out.println(id);
         // Retrieve the logged-in user's User object
         org.springframework.security.core.userdetails.User userDetails = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
 
